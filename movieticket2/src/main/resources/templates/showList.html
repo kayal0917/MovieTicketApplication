@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Show List</title>
+<style>
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.show-table {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+.add-show-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.add-show-link a {
+    text-decoration: none;
+    color: #007BFF;
+    font-size: 16px;
+    margin: 10px;
+    padding: 10px 20px;
+    border: 1px solid #007BFF;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.add-show-link a:hover {
+    background-color: #007BFF;
+    color: #fff;
+}
+</style>
+</head>
+<body>
+    <div class="show-table">
+        <h1>Show Times</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Show ID</th>
+                    <th>Movie Name</th>
+                    <th>Theater ID</th>
+                    <th>Show Date</th>
+                    <th>Show Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="show : ${session.showList}">
+                    <td th:text="${show.showtimeId}"></td>
+                    <td th:text="${show.movieName}"></td>
+                    <td th:text="${show.theaterId}"></td>
+                    <td th:text="${show.showDate}"></td>
+                    <td th:text="${show.showTime}"></td>
+                    <td>
+                        <form th:action="@{/deleteShow}" method="post">
+                            <input type="hidden" name="showtime_id" th:value="${show.showtimeId}">
+                            <input type="submit" value="Delete">
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="add-show-link">
+        <a th:href="@{/addShow}">Add New Show</a>
+        <a th:href="@{/movie}">Add New Movie</a>
+    </div>
+</body>
+</html>
