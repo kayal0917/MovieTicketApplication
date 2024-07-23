@@ -182,7 +182,10 @@ public class MovieImp implements UserDAO {
 		String deleteShowSql = "DELETE FROM show_table WHERE showtime_id = ?";
 		jdbcTemplate.update(deleteShowSql, showtimeId);
 	}
-
+	public int findTheaterIdByName(String username) {
+		String query="SELECT theater_id FROM theaters WHERE admin_id=(SELECT admin_id FROM admin WHERE user_name=?);";
+		return jdbcTemplate.queryForObject(query, Integer.class,new Object[] { username });
+	}
 	public List<ShowTime> fetchShowList(int theaterId) {
 		String fetchShowListSql = "SELECT s.showtime_id, m.title AS movieName, s.theater_id, s.show_date, s.show_time "
 				+ "FROM show_table s " + "JOIN movie_details m ON s.movie_id = m.movie_id WHERE s.theater_id="

@@ -75,7 +75,7 @@ th {
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="show : ${session.showList}">
+                <tr th:each="show : ${showList}">
                     <td th:text="${show.showtimeId}"></td>
                     <td th:text="${show.movieName}"></td>
                     <td th:text="${show.theaterId}"></td>

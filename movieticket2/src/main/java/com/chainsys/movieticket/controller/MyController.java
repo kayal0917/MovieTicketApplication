@@ -176,7 +176,12 @@ public class MyController {
 		System.out.println("Home Page");
 		return "list";
 	}
-
+	@GetMapping("/seat")
+    public String seat(Model model) {
+		char[] rows = {'A', 'B', 'C', 'D', 'E', 'F'};
+		model.addAttribute("rows", rows);
+        return "seat.html"; 
+    }
 	@RequestMapping("/adminsignup")
 	public String adminSigUp() {
 		System.out.println("Home Page");
@@ -184,24 +189,20 @@ public class MyController {
 	}
 
 	@GetMapping("/adminsignin")
-	public String signin(@RequestParam("username") String userName, @RequestParam("password") String password, HttpSession session) {
+	public String signin(@RequestParam("username") String userName, @RequestParam("password") String password,Model model, HttpSession session) {
 		System.out.println(userName+" "+password);
 		System.out.println(userDAO.adminpassword(userName));
 		System.out.println(password.equals(userDAO.adminpassword(userName)));
 			if (userName.equals("joe09admin") && password.equals("Joe#09")) {
 				return "List";
-
 			}
-
 			else if (password.equals(userDAO.adminpassword(userName)))
 			{
-				
-				String user = (String)session.getAttribute("userName");
-				String location = (String)session.getAttribute("location");
-				List<MovieDetails> list = userDAO.getShowDetails("Coimbatore");
-				System.out.println(list.get(1));
-				session.setAttribute("showList",list);
-				System.out.println("Iam in the showlist");
+				int theaterId = userDAO.findTheaterIdByName(userName);
+				session.setAttribute("theaterId", theaterId);
+				List<ShowTime> showList = userDAO.fetchShowList(theaterId);
+				System.out.println("setting the showlist");
+				model.addAttribute("showList", showList);
 				return "showList";
 			}
 			else {
@@ -299,55 +300,39 @@ public class MyController {
 
 	@PostMapping("/addShow")
 	public String addShow(@RequestParam("MovieName") String movieName, @RequestParam("ShowDate") String showDate,
-			@RequestParam("ShowTime") String showTime, HttpSession session, HttpServletRequest request) {
+			@RequestParam("ShowTime") String showTime, HttpSession session,Model model) {
 		Integer movieId = userDAO.fetchMovieIdByTitle(movieName);
 		int theaterId=(int) session.getAttribute("theaterId");
 		if (movieId == null) {
-			request.setAttribute("message", "Movie not found");
+			model.addAttribute("message", "Movie not found");
 			return "showResponse";
 		}
 
 		userDAO.insertShow(movieId, theaterId, showDate, showTime);
 
-		request.setAttribute("message", "Show added successfully");
+		model.addAttribute("message", "Show added successfully");
 		return "showList";
 	}
-//    @PostMapping("/addMovie")
-//    public String movie(
-//    		@RequestParam("title") String title, @RequestParam("description") String description,
-//			@RequestParam("releaseDate") String releaseDate, @RequestParam("duration") int duration,
-//			@RequestParam("genre") String genre, @RequestParam("director") String director,
-//			@RequestParam("cast") String cast, @RequestParam("language") String language,
-//			@RequestParam("rating") double rating, @RequestParam("imageUrl") String imageUrl,
-//			@RequestParam("trailerUrl") String trailerUrl) {
-//    	Movie movie=new Movie();
-//        userDAO.insertMovie(movie.setTitle(title), movie.setDescription(description), movie.setReleaseDate(releaseDate), movie.setDuration(duration),
-//				movie.setGenre(genre), movie.setDirector(director), movie.setCast(cast), movie.setLanguage(language), movie.setRating(rating),
-//				movie.setImageUrl(imageUrl), movie.setTrailerUrl(trailerUrl));
-//        return "addMovie";
-//    }
-
-
 	@PostMapping("/deleteShow")
 	public String deleteShow(@RequestParam("showtime_id") int showtimeId, HttpServletRequest request) {
 		userDAO.deleteShow(showtimeId);
 		return "showList";
 	}
 
-    @PostMapping("/showList")
+	@PostMapping("/showList")
     public String showList(HttpSession session,Model model) {
     	int theaterId = (int)session.getAttribute("theaterId");
     	System.out.println(theaterId);
         List<ShowTime> showList = userDAO.fetchShowList(theaterId);
-//        for(ShowTime theater: showList) {
-//			System.out.println(theater.getTheaterId());
-//			for(ShowTime showTime: showList) {
-//				if(theater.getTheaterId().equals(showTime.getTheaterId())) {
-//					System.out.println(showTime.getShowtimeId());
-//				}
-//			}
-//		}
-//        System.out.println(theaterId);
+        for(ShowTime theater: showList) {
+			System.out.println(theater.getTheaterId());
+			for(ShowTime showTime: showList) {
+				if(theater.getTheaterId().equals(showTime.getTheaterId())) {
+					System.out.println(showTime.getShowtimeId());
+				}
+			}
+		}
+        System.out.println(theaterId);
         System.out.println(showList);
         model.addAttribute("showList", showList);
         return "showList";

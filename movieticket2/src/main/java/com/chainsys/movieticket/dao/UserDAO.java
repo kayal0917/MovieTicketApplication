@@ -29,6 +29,7 @@ public interface UserDAO {
 	public void insertShow(Integer movieId, Integer theaterId, String showDate, String showTime) ;
 	public void deleteShow(int showtimeId) ;
 	public List<ShowTime> fetchShowList(int theaterId) ;
+	public int findTheaterIdByName(String username);
 	public Integer fetchMovieIdByTitle(String movieName);
 	public List<MovieDetails> getShowDetails(String location) ;
 	public void insertBooking(String userName, String seats, int seatCount, String bookingDate,

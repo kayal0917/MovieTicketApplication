@@ -63,7 +63,7 @@
     <h1 style="text-align: center;">Choose Your Seats</h1>
     <form th:action="@{/book}" method="post">
         <div class="container">
-            <div class="row" th:each="row : ${{'A', 'B', 'C', 'D', 'E', 'F'}}">
+            <div class="row" th:each="row : ${rows}">
                 <div class="seat" th:id="${row} + ${seatIndex}" th:each="seatIndex : ${#numbers.sequence(1, 20)}">
                     <span th:text="${row} + ${seatIndex}"></span>
                 </div>
