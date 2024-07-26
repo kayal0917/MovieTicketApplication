@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Search Results</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .movie-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .movie-item img {
+            width: 100px;
+            height: auto;
+            margin-right: 20px;
+            border-radius: 8px;
+        }
+        .movie-item h3 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Search Results</h1>
+        <div th:each="movie : ${movies}" class="movie-item">
+            <img th:src="'https://image.tmdb.org/t/p/w500' + ${movie.poster_path}" alt="Movie Poster">
+            <div>
+                <h3 th:text="${movie.title}">Movie Title</h3>
+                <p><strong>Release Date:</strong> <span th:text="${movie.release_date}">Release Date</span></p>
+                <a th:href="@{/movie(id=${movie.id})}">View Details</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

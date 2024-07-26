@@ -217,6 +217,23 @@ public class MovieImp implements UserDAO {
 		List<MovieDetails> detailsList = jdbcTemplate.query(select, new Object[] { cityId }, new ShowDetailsMapper());
 		return detailsList;
 	}
+	
+	public List<MovieDetails> getShowDetails(String location,String movieName) {
+		String select = "SELECT " + "    st.showtime_id, " + "    st.movie_id, " + "    md.title, "
+				+ "    md.description, " + "    md.release_date, " + "    md.duration, " + "    md.genre, "
+				+ "    md.director, " + "    md.cast, " + "    md.language, " + "    md.rating, "
+				+ "    md.trailer_url, " + "    md.image_url, " + "    st.theater_id, " + "    t.city_id, "
+				+ "    t.theater_name, " + "    st.show_date, " + "    st.show_time, "
+				+ "    t.delete_user AS theater_delete_user, " + "    t.admin_id " + "FROM " + "    show_table st "
+				+ "INNER JOIN " + "    theaters t ON st.theater_id = t.theater_id " + "INNER JOIN "
+				+ "    movie_details md ON st.movie_id = md.movie_id " + "WHERE " + "    t.city_id = ? AND md.title = ?  "
+				+ "LIMIT 0, 1000;";
+
+		int cityId = getCityId(location);
+		@SuppressWarnings("deprecation")
+		List<MovieDetails> detailsList = jdbcTemplate.query(select, new Object[] { cityId ,movieName}, new ShowDetailsMapper());
+		return detailsList;
+	}
 
 	@Override
 	public void insertBooking(String userName, String seats, int seatCount, String bookingDate, int totalAmount) {
@@ -226,5 +243,9 @@ public class MovieImp implements UserDAO {
 		jdbcTemplate.update(sql, userName, seats, seatCount, bookingDate, totalAmount);
 
 	}
+	public void insertBooking(String userName, int seatCount, double totalAmount) {
+        String sql = "INSERT INTO bookings (user_name, seat_count, total_amount) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, userName, seatCount, totalAmount);
+    }
 
 }

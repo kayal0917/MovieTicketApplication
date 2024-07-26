@@ -1,86 +1,85 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 20px;
-            background: linear-gradient(to right, #ffecd2, #fcb69f);
-            color: #444;
-        }
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+<style>
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    display: flex;
+}
 
-        h1 {
-            color: #333;
-            text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            background: -webkit-linear-gradient(#ee0979, #ff6a00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+.sidebar {
+    width: 250px;
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+}
 
-        nav ul {
-            display: flex;
-            justify-content: center;
-            list-style-type: none;
-            padding: 0;
-        }
+.sidebar h2 {
+    margin: 0;
+    font-size: 1.5em;
+}
 
-        nav ul li {
-            margin: 0 10px;
-        }
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
 
-        nav ul li a, nav ul li button {
-            display: inline-block;
-            padding: 10px 20px;
-            cursor: pointer;
-            background: linear-gradient(to right, #ee0979, #ff6a00);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
+.sidebar ul li {
+    margin: 20px 0;
+}
 
-        nav ul li a:hover, nav ul li button:hover {
-            background: linear-gradient(to right, #ff6a00, #ee0979);
-            box-shadow: 0 6px 8px rgba(0,0,0,0.2);
-        }
+.sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1em;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+}
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+.sidebar ul li a:hover {
+    background-color: #575757;
+}
 
-        main {
-            text-align: center;
-        }
-    </style>
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    flex: 1;
+}
+
+.dashboard-welcome {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-welcome h1 {
+    margin: 0;
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Admin</h1>
-        </header> 
-        <nav>
-            <ul>
-                <li><a th:href="@{/userList}">User List</a></li>
-                <li><a th:href="@{/theaterList}">Theater List</a></li>
-                <li><a th:href="@{/AllMovie}">Movie List</a></li>
-            </ul>
-        </nav>
-        <main>
-            <h2>Welcome to the Admin Panel</h2>
-        </main>
+    <aside class="sidebar">
+        <h2>Admin Dashboard</h2>
+        <ul>
+           
+            <li><a th:href="@{/userList}">User List</a></li>
+            <li><a th:href="@{/theaterList}">Theater List</a></li>
+            <li><a th:href="@{/AllMovie}">Movie List</a></li>
+        </ul>
+    </aside>
+    <div class="main-content">
+        <div class="dashboard-welcome">
+            <h1>Welcome to the Admin Dashboard</h1>
+            <p>Use the sidebar to navigate to different sections of the admin panel.</p>
+        </div>
     </div>
 </body>
 </html>

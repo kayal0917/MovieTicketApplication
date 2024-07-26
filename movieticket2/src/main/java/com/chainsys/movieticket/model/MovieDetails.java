@@ -143,6 +143,15 @@ public class MovieDetails  {
 	public void setAdminId(int adminId) {
 		this.adminId = adminId;
 	}
+	@Override
+	public String toString() {
+		return "MovieDetails [showtimeId=" + showtimeId + ", movieId=" + movieId + ", title=" + title + ", description="
+				+ description + ", releaseDate=" + releaseDate + ", duration=" + duration + ", genre=" + genre
+				+ ", director=" + director + ", cast=" + cast + ", language=" + language + ", rating=" + rating
+				+ ", trailerUrl=" + trailerUrl + ", imageUrl=" + imageUrl + ", theaterId=" + theaterId + ", cityId="
+				+ cityId + ", theaterName=" + theaterName + ", showDate=" + showDate + ", showTime=" + showTime
+				+ ", theaterDeleteUser=" + theaterDeleteUser + ", adminId=" + adminId + "]";
+	}
 	
 	
 }

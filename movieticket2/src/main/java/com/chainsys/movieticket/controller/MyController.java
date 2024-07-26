@@ -3,6 +3,9 @@ package com.chainsys.movieticket.controller;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import com.chainsys.movieticket.dao.UserDAO;
+import com.chainsys.movieticket.model.Allocation;
 import com.chainsys.movieticket.model.Movie;
 import com.chainsys.movieticket.model.MovieDetails;
 import com.chainsys.movieticket.model.ShowTime;
@@ -38,19 +42,31 @@ public class MyController {
 		return "signUp";
 	}
 	@GetMapping("/userSignin")
-	public String userSignin(@RequestParam("username") String username, @RequestParam("password") String password,HttpSession session) {
-		System.out.println("signin Page");
+	public String userSignin(@RequestParam("username") String username, @RequestParam("password") String password,HttpSession session,Model model) {
 		String location = userDAO.getuserLocation(username);
 		System.out.println(location);
-		List<MovieDetails> list = userDAO.getShowDetails(location);
-		System.out.println(list.size());
-		session.setAttribute("showList",list);
+		Allocation allocation=new Allocation();
+		allocation.setLocation(location);
+		allocation.setUserName(username);
+		session.setAttribute("allocation", allocation);
+		Set<String> seenTitles = ConcurrentHashMap.newKeySet();
+	    List<MovieDetails> list = userDAO.getShowDetails(location)
+	                                     .stream()
+	                                     .filter(movie -> seenTitles.add(movie.getTitle()))
+	                                     .collect(Collectors.toList());
+		
+		model.addAttribute("showList",list);
 		return "home";
 	}
 	@GetMapping("/showList")
 	public String showList() {
 		System.out.println("showList Page");
 		return "showList";
+	}
+	@PostMapping("/ticket")
+	public String ticket() {
+		System.out.println("ticket Page");
+		return "ticket";
 	}
 	
 	@RequestMapping("/signUp")
@@ -81,12 +97,10 @@ public class MyController {
 		users.setLocation(location);
 		userDAO.insertUser(users);
 		
-		session.setAttribute(location, location);
+		session.setAttribute("location", location);
+		
 		
 		return "signin";
-		
-		
-		
 	}
 
 	
@@ -114,14 +128,13 @@ public class MyController {
 
 	}
 
-	@GetMapping("/search")
-	public String search(@RequestParam("userName") String userName, Model model) {
-		List<Users> users = userDAO.search(userName);
-		model.addAttribute("users", users);
-
-		return "userList";
-	}
-
+	/*
+	 * @GetMapping("/search") public String search(@RequestParam("userName") String
+	 * userName, Model model) { List<Users> users = userDAO.search(userName);
+	 * model.addAttribute("users", users);
+	 * 
+	 * return "userList"; }
+	 */
 	@RequestMapping("/")
 	public String index() {
 		System.out.println("Home Page");
@@ -140,7 +153,7 @@ public class MyController {
 	                        @RequestParam("password") String password,
 	                        HttpSession session, Model model) {
 	        try {
-	            if (username.equals("joe09@admin") && password.equals("Joe#09")) {
+	            if (username.equals("joe09admin") && password.equals("Joe#09")) {
 	                return "List";
 	            } else {
 	                session.setAttribute("adminId", 6);
@@ -176,16 +189,15 @@ public class MyController {
 		System.out.println("Home Page");
 		return "list";
 	}
-	@GetMapping("/seat")
-    public String seat(Model model) {
-		char[] rows = {'A', 'B', 'C', 'D', 'E', 'F'};
-		model.addAttribute("rows", rows);
-        return "seat.html"; 
-    }
 	@RequestMapping("/adminsignup")
 	public String adminSigUp() {
 		System.out.println("Home Page");
 		return "adminsignup";
+	}
+	@RequestMapping("/adminDasboard")
+	public String adminDasboard() {
+		System.out.println("adminDasboard Page");
+		return "adminDasboard";
 	}
 
 	@GetMapping("/adminsignin")
@@ -203,7 +215,7 @@ public class MyController {
 				List<ShowTime> showList = userDAO.fetchShowList(theaterId);
 				System.out.println("setting the showlist");
 				model.addAttribute("showList", showList);
-				return "showList";
+				return "adminDasboard";
 			}
 			else {
 				return "adminsignin";
@@ -287,16 +299,29 @@ public class MyController {
 		model.addAttribute("allmovies", movie1);
 		return "/movielist";
 	}
+	
+
 	@GetMapping("/addShow")
 	public String addshow() {
 		System.out.println("addshow Page");
 		return "addshow";
 	}
-	@GetMapping("/movie")
-	public String movie() {
-		System.out.println("movie Page");
-		return "movie";
+
+	/*
+	 * @GetMapping("/movie") public String movie() {
+	 * System.out.println("movie Page"); return "movie"; }
+	 */
+	@PostMapping("/payment")
+	public String payment() {
+		System.out.println("payment Page");
+		return "payment";
 	}
+	@PostMapping("/paymentprocess")
+	public String paymentprocess() {
+		System.out.println("paymentprocess Page");
+		return "paymentprocess";
+	}
+
 
 	@PostMapping("/addShow")
 	public String addShow(@RequestParam("MovieName") String movieName, @RequestParam("ShowDate") String showDate,
@@ -307,7 +332,6 @@ public class MyController {
 			model.addAttribute("message", "Movie not found");
 			return "showResponse";
 		}
-
 		userDAO.insertShow(movieId, theaterId, showDate, showTime);
 
 		model.addAttribute("message", "Show added successfully");
@@ -336,20 +360,7 @@ public class MyController {
         System.out.println(showList);
         model.addAttribute("showList", showList);
         return "showList";
-    }
-
-    @PostMapping("/processBooking")
-    public String processBooking(
-                                 @RequestParam("username") String userName,
-                                 @RequestParam("selectedSeats") String seats,
-                                 @RequestParam("selectedSeatsCount") int seatCount,
-                                 @RequestParam("showDate") String bookingDate,
-                                 @RequestParam("totalAmount") int totalAmount) {
-    	
-        userDAO.insertBooking( userName, seats, seatCount, bookingDate, totalAmount);
-        return "payment";
-    }
-    
+    } 
 //    @RequestMapping("/Search")
 //    public String propertySearch(Model model, @RequestParam("MovieName") String MovieName) {
 //        List<Movie> list = userDAO.Search(MovieName).stream()
@@ -371,5 +382,12 @@ public class MyController {
 	{
 		return "adminSignin";
 	}
+
+	@RequestMapping("/front")
+	public String front()
+	{
+		return "front";
+	}
+	
 }
     

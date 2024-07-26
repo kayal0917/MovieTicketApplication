@@ -1,86 +1,134 @@
 package com.chainsys.movieticket.model;
 
+import java.util.List;
+
 public class Movie {
 
-	String title;
-	String description;
-    String releaseDate;
-    int duration;
-    String genre;
-    String director;
-	String cast;
-    String language;
-    double rating;
-String imageUrl;
-    public String getImageUrl() {
-	return imageUrl;
-}
-public void setImageUrl(String imageUrl) {
-	this.imageUrl = imageUrl;
-}
-	public String getTrailerUrl() {
-		return trailerUrl;
-	}
-	public void setTrailerUrl(String trailerUrl) {
-		this.trailerUrl = trailerUrl;
-	}
-	String trailerUrl;
+    private boolean adult;
+    private String backdropPath;
+    private List<Integer> genreIds;
+    private int id;
+    private String originalLanguage;
+    private String originalTitle;
+    private String overview;
+    private double popularity;
+    private String posterPath;
+    private String releaseDate;
+    private String title;
+    private boolean video;
+    private double voteAverage;
+    private int voteCount;
+
+    // Getters and setters
+    public boolean isAdult() {
+        return adult;
+    }
+
+    public void setAdult(boolean adult) {
+        this.adult = adult;
+    }
+
+    public String getBackdropPath() {
+        return backdropPath;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
+
+    public List<Integer> getGenreIds() {
+        return genreIds;
+    }
+
+    public void setGenreIds(List<Integer> genreIds) {
+        this.genreIds = genreIds;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getOriginalLanguage() {
+        return originalLanguage;
+    }
+
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
+    }
+
+    public String getOriginalTitle() {
+        return originalTitle;
+    }
+
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public double getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(double popularity) {
+        this.popularity = popularity;
+    }
+
+    public String getPosterPath() {
+        return posterPath;
+    }
+
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
 
     public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public String getReleaseDate() {
-		return releaseDate;
-	}
-	public void setReleaseDate(String releaseDate) {
-		this.releaseDate = releaseDate;
-	}
-	public int getDuration() {
-		return duration;
-	}
-	public void setDuration(int duration) {
-		this.duration = duration;
-	}
-	public String getGenre() {
-		return genre;
-	}
-	public void setGenre(String genre) {
-		this.genre = genre;
-	}
-	public String getDirector() {
-		return director;
-	}
-	public void setDirector(String director) {
-		this.director = director;
-	}
-	public String getLanguage() {
-		return language;
-	}
-	public void setLanguage(String language) {
-		this.language = language;
-	}
-	public double getRating() {
-		return rating;
-	}
-	public void setRating(double rating) {
-		this.rating = rating;
-	}
+        return title;
+    }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public String getCast() {
-		return cast;
-	}
-	public void setCast(String cast) {
-		this.cast = cast;
-	}
-	
+    public boolean isVideo() {
+        return video;
+    }
+
+    public void setVideo(boolean video) {
+        this.video = video;
+    }
+
+    public double getVoteAverage() {
+        return voteAverage;
+    }
+
+    public void setVoteAverage(double voteAverage) {
+        this.voteAverage = voteAverage;
+    }
+
+    public int getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(int voteCount) {
+        this.voteCount = voteCount;
+    }
 }

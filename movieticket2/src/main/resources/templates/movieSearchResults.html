@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Search Results</title>
+    <style>
+        /* Basic styling for movie cards and details */
+        .movie-card {
+            border: 1px solid #ddd;
+            margin: 10px;
+            padding: 10px;
+            cursor: pointer;
+            display: inline-block;
+            width: 150px;
+            vertical-align: top;
+        }
+        .movie-card img {
+            width: 100%;
+        }
+        .movie-card-content {
+            margin-top: 10px;
+        }
+        #movieDetails {
+            margin-top: 20px;
+        }
+        #movieDetails img {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Search Results</h1>
+    <div id="movieContainer"></div>
+    <div id="movieDetails" style="display: none;">
+        <h3 id="movieTitle"></h3>
+        <img id="moviePoster" src="" alt="Movie Poster">
+        <p id="movieReleaseDate"></p>
+        <p id="movieOverview"></p>
+    </div>
+
+  <script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function() {
+	    // JSON data from Thymeleaf
+	    var moviesJson = /*[[${moviesJson}]]*/ '[]';
+	    
+	    // Decode HTML entities if necessary
+	    function decodeHtmlEntities(str) {
+	        var txt = document.createElement("textarea");
+	        txt.innerHTML = str;
+	        return txt.value;
+	    }
+
+	    // Decode and parse the JSON data
+	    moviesJson = decodeHtmlEntities(moviesJson);
+	    var movies;
+	    try {
+	        movies = JSON.parse(moviesJson);
+	    } catch (e) {
+	        console.error("Error parsing JSON data:", e);
+	        movies = { results: [] }; // Default to empty results if parsing fails
+	    }
+	    
+	    var container = document.getElementById('movieContainer');
+
+	    function createMovieCard(movie) {
+	        var card = document.createElement('div');
+	        card.className = 'movie-card';
+
+	        var img = document.createElement('img');
+	        img.src = movie.poster_path ? 'http://image.tmdb.org/t/p/w500/' + movie.poster_path : 'default-poster.jpg';
+	        img.alt = movie.title;
+	        card.appendChild(img);
+
+	        var content = document.createElement('div');
+	        content.className = 'movie-card-content';
+
+	        var title = document.createElement('h3');
+	        title.textContent = movie.title;
+	        content.appendChild(title);
+
+	        var releaseDate = document.createElement('p');
+	        releaseDate.textContent = 'Release Date: ' + movie.release_date;
+	        content.appendChild(releaseDate);
+
+	        var overview = document.createElement('p');
+	        overview.textContent = movie.overview;
+	        content.appendChild(overview);
+
+	        card.appendChild(content);
+	        return card;
+	    }
+
+	    if (movies.results && movies.results.length > 0) {
+	        // Create and append movie cards
+	        movies.results.forEach(function(movie) {
+	            var card = createMovieCard(movie);
+	            container.appendChild(card);
+	        });
+	    } else {
+	        container.innerHTML = '<p>No movies found.</p>';
+	    }
+	});
+
+
+    </script>
+</body>
+</html>

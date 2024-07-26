@@ -32,8 +32,10 @@ public interface UserDAO {
 	public int findTheaterIdByName(String username);
 	public Integer fetchMovieIdByTitle(String movieName);
 	public List<MovieDetails> getShowDetails(String location) ;
+	public List<MovieDetails> getShowDetails(String location,String movieName) ;
 	public void insertBooking(String userName, String seats, int seatCount, String bookingDate,
 			int totalAmount);
+	public void insertBooking(String userName, int seatCount, double totalAmount);
 
 
 }

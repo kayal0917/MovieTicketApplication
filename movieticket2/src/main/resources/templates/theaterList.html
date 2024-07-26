@@ -1,170 +1,156 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Theater Details</title>
-<style>
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 20px;
-    background: linear-gradient(to right, #ffecd2, #fcb69f);
-    color: #444;
-}
+    <title>Payment History</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slickgrid/2.4.45/slick.grid.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slickgrid/2.4.45/css/smooth-theme.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.event.drag/2.3.0/jquery.event.drag.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slickgrid/2.4.45/slick.core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slickgrid/2.4.45/slick.grid.min.js"></script>
+    <link th:href="@{/lib/slick.grid.min.css}" rel="stylesheet" />
+    <link th:href="@{/lib/slick-default-theme.min.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/lib/jquery-ui-1.8.16.custom.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/lib/slick.grid.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/lib/custom-slickgrid.css}" type="text/css" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background: linear-gradient(to right, #ffecd2, #fcb69f);
+            color: #444;
+        }
 
-h1 {
-    color: #333;
-    text-align: center;
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    background: -webkit-linear-gradient(#ee0979, #ff6a00);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+        h1 {
+            color: #333;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            background: -webkit-linear-gradient(#ee0979, #ff6a00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-form {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
+        #myGrid {
+            width: 100%;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background: #fff;
+        }
 
-label {
-    font-weight: bold;
-    margin-right: 10px;
-    color: #ee0979;
-}
+        .slick-header-column {
+            background: linear-gradient(to right, #ee0979, #ff6a00);
+            color: white;
+            font-weight: bold;
+        }
 
-input[type="text"] {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-}
+        .slick-header-column .slick-column-name {
+            color: #fff;
+        }
 
-input[type="text"]:focus {
-    border-color: #ff6a00;
-    box-shadow: 0 0 8px rgba(255, 106, 0, 0.5);
-}
+        .slick-row {
+            transition: background-color 0.3s ease;
+        }
 
-button {
-    padding: 10px 20px;
-    cursor: pointer;
-    background: linear-gradient(to right, #ee0979, #ff6a00);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    margin-left: 10px;
-    transition: all 0.3s ease;
-}
+        .slick-row:nth-child(even) {
+            background-color: #f9f9f9;
+        }
 
-button:hover {
-    background: linear-gradient(to right, #ff6a00, #ee0979);
-    box-shadow: 0 6px 8px rgba(0,0,0,0.2);
-}
+        .slick-row:hover {
+            background-color: #ffecd2;
+        }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
+        .slick-cell {
+            padding: 10px;
+            box-sizing: border-box;
+        }
 
-th, td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
-}
+        .slick-header {
+            border-bottom: 1px solid #ddd;
+        }
 
-th {
-    background: linear-gradient(to right, #ff6a00, #ee0979);
-    color: white;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
+        @media (max-width: 600px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
 
-tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
+            th {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
 
-tr:hover {
-    background-color: #ffecd2;
-}
+            tr {
+                border: 1px solid #ccc;
+            }
 
-@media (max-width: 600px) {
-    table, thead, tbody, th, td, tr {
-        display: block;
-    }
+            td {
+                border: none;
+                border-bottom: 1px solid #ddd;
+                position: relative;
+                padding-left: 50%;
+            }
 
-    th {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-    }
+            td:before {
+                position: absolute;
+                top: 6px;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+            }
 
-    tr {
-        border: 1px solid #ccc;
-    }
-
-    td {
-        border: none;
-        border-bottom: 1px solid #ddd;
-        position: relative;
-        padding-left: 50%;
-    }
-
-    td:before {
-        position: absolute;
-        top: 6px;
-        left: 6px;
-        width: 45%;
-        padding-right: 10px;
-        white-space: nowrap;
-    }
-
-    td:nth-of-type(1):before { content: "Theater"; }
-    td:nth-of-type(2):before { content: "City"; }
-    td:nth-of-type(3):before { content: "Theater Name"; }
-    td:nth-of-type(4):before { content: "Delete"; }
-}</style>
+            td:nth-of-type(1):before { content: "UserName"; }
+            td:nth-of-type(2):before { content: "Email"; }
+            td:nth-of-type(3):before { content: "Password"; }
+            td:nth-of-type(4):before { content: "Location"; }
+        }
+    </style>
 </head>
 <body>
-    <form action="/search" method="GET">
-        <label for="searchTerm">Search by Name:</label>
-        <input type="text" id="searchTerm" name="userName" placeholder="Enter name...">
-        <button type="submit">Search</button>
-    </form>
     <h1>Theater Details</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Theater</th>
-                <th>City</th>
-                <th>Theater Name</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Thymeleaf iteration -->
-            <tr th:each="theater : ${users}">
-                <td th:text="${theater.theaterid}"></td>
-                <td th:text="${theater.cityname}"></td>
-                <td th:text="${theater.theatername}"></td>
-                <td>
-                    <form action="deleteTheater" method="POST">
-                        <input type="hidden" name="theatername" th:value="${theater.theatername}">
-                        <button type="submit">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            <!-- Handle no records found -->
-            <tr th:if="${#lists.isEmpty(theaters)}">
-                <td colspan="4">No Records found</td>
-            </tr>
-        </tbody>
-    </table>
+    <div id="myGrid" style="height:200px;"></div>
+    <script th:src="@{/lib/jquery-1.7.min.js}"></script>
+    <script th:src="@{/lib/jquery-ui-1.8.16.custom.min.js}"></script>
+    <script th:src="@{/lib/jquery.event.drag-2.2.js}"></script>
+    <script th:src="@{/lib/slick.formatters.js}"></script>
+    <script th:src="@{/lib/slick.core.js}"></script>
+    <script th:src="@{/lib/slick.dataview.js}"></script>
+    <script th:src="@{/lib/slick.grid.js}"></script>
+    <script th:inline="javascript">
+        $(function () {
+            var grid;
+            var data = /*[[${users}]]*/ [];
+            var columns = [
+                {id: "theaterid", name: "Theater", field: "theaterid",sortable: true},
+                {id: "cityname", name: "City", field: "cityname",sortable: true},
+                {id: "theatername", name: "Theater", field: "theatername"},
+            ];
+
+            var options = {
+                enableCellNavigation: true,
+                enableColumnReorder: false,
+                forceFitColumns: true,
+                rowHeight: 35,
+                enableSorting: true
+            };
+
+            grid = new Slick.Grid("#myGrid", data, columns, options);
+
+            grid.onSort.subscribe(function (e, args) {
+                var field = args.sortCol.field;
+                data.sort(function (a, b) {
+                    var result = 
+                        a[field] > b[field] ? 1 :
+                        a[field] < b[field] ? -1 :
+                        0;
+                    return args.sortAsc ? result : -result;
+                });
+                grid.invalidate();
+                grid.render();
+            });
+        });
+    </script>
 </body>
 </html>

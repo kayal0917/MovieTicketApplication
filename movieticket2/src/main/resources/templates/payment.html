@@ -1,77 +1,132 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Page</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="payment.js" defer="defer"></script>
-    <style>
-        /* Your existing CSS styles */
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Summary</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f0f0f0;
+	margin: 0;
+	padding: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
+.booking-summary {
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	padding: 15px;
+	max-width: 400px;
+	width: 100%;
+}
+
+.booking-summary h1, .booking-summary h2 {
+	color: #333;
+	margin-top: 0;
+}
+
+.ticket-details, .contribution, .state-info, .amount-payable,
+	.ticket-type, .consent, .total-amount {
+	margin-bottom: 10px;
+}
+
+.ticket-details p, .contribution p, .state-info p, .amount-payable h2,
+	.ticket-type p, .consent p, .total-amount h2, .cancellation-policy {
+	color: #555;
+	margin: 5px 0;
+}
+
+.contribution a {
+	color: #007bff;
+	text-decoration: none;
+}
+
+.contribution a:hover {
+	text-decoration: underline;
+}
+
+.ticket-type label {
+	display: block;
+	margin-bottom: 5px;
+}
+
+.proceed-button {
+	background-color: #28a745;
+	color: white;
+	padding: 10px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100%;
+	font-size: 16px;
+}
+
+.proceed-button:hover {
+	background-color: #218838;
+}
+
+.cancellation-policy {
+	font-size: 14px;
+	color: #777;
+	text-align: center;
+	margin-top: 10px;
+}
+</style>
 </head>
 <body>
-    <div class="payment-container">
-        <h1>Payment</h1>
-        <form id="paymentForm" action="ticket.jsp" method="post" th:action="@{/ticket}">
-            <div class="form-group">
-                <label for="cardNumber">Card Number:</label>
-                <input type="text" id="cardNumber" name="cardNumber" maxlength="16" pattern="\d{16}" required>
-            </div>
-            <div class="form-group">
-                <label for="expiry">Expiry Date:</label>
-                <input type="text" id="expiry" name="expiry" placeholder="MM/YY" pattern="(0[1-9]|1[0-2])\/\d{2}" required>
-            </div>
-            <div class="form-group">
-                <label for="cvv">CVV:</label>
-                <input type="text" id="cvv" name="cvv" maxlength="3" pattern="\d{3}" required>
-            </div>
-            <div class="form-group">
-                <label for="cardHolderName">Cardholder Name:</label>
-                <input type="text" id="cardHolderName" name="cardHolderName" required>
-            </div>
-            <button type="submit">Pay Now</button>
-        </form>
-    </div>
-
-    <!-- JavaScript validation using Thymeleaf attributes -->
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        document.getElementById('paymentForm').addEventListener('submit', function(event) {
-            const cardNumber = document.getElementById('cardNumber').value;
-            const expiry = document.getElementById('expiry').value;
-            const cvv = document.getElementById('cvv').value;
-            const cardHolderName = document.getElementById('cardHolderName').value;
-
-            const cardNumberPattern = /^\d{16}$/;
-            const expiryPattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
-            const cvvPattern = /^\d{3}$/;
-
-            if (!cardNumberPattern.test(cardNumber)) {
-                alert('Please enter a valid 16-digit card number.');
-                event.preventDefault();
-                return;
-            }
-
-            if (!expiryPattern.test(expiry)) {
-                alert('Please enter a valid expiry date in MM/YY format.');
-                event.preventDefault();
-                return;
-            }
-
-            if (!cvvPattern.test(cvv)) {
-                alert('Please enter a valid 3-digit CVV.');
-                event.preventDefault();
-                return;
-            }
-
-            if (cardHolderName.trim() === '') {
-                alert('Please enter the cardholder name.');
-                event.preventDefault();
-                return;
-            }
-        });
-        /*]]>*/
-    </script>
+	<form th:action="@{/paymentprocess}" method="post">
+		<div class="booking-summary">
+			<h1>BOOKING SUMMARY</h1>
+			<div class="ticket-details">
+				<h2
+					th:text="'Platinum - ' + ${session.seats} + ' (' + ${session.seatCount} + ' Tickets)'"></h2>
+				<p>
+					Jazz Rs. <span th:text="${session.amount}"></span>
+				</p>
+				<p>Convenience fees: Rs. 47.20</p>
+				<p>
+					Sub total: Rs. <span th:text="${session.amount}"></span>
+				</p>
+			</div>
+			<div class="contribution">
+				<p>Contribute to BookASmile: Rs. 0</p>
+				<p>Add Rs. 2 (₹1 per ticket has been added)</p>
+				<a href="#">VIEW T&C</a>
+			</div>
+			<div class="state-info">
+				<p>Your current state is Tamil Nadu</p>
+			</div>
+			<div class="amount-payable">
+				<h2>
+					Amount Payable: Rs. <span th:text="${session.amount}"></span>
+				</h2>
+			</div>
+			<div class="ticket-type">
+				<h2>SELECT TICKET TYPE</h2>
+				<label> <input type="radio" name="ticket-type"
+					value="m-ticket" checked> M-Ticket
+				</label>
+				<!-- <label>
+                <input type="radio" name="ticket-type" value="box-office-pickup">
+                Box Office Pickup
+            </label> -->
+				
+			</div>
+			<div class="total-amount">
+				<h2>
+					TOTAL: Rs. <span th:text="${session.amount}"></span>
+				</h2>
+			</div>
+			<button class="proceed-button">Proceed</button>
+			<p class="cancellation-policy">You can cancel the tickets 4
+				hour(s) before the show. Refunds will be done according to
+				Cancellation Policy.</p>
+		</div>
+	</form>
 </body>
 </html>

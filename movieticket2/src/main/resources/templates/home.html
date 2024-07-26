@@ -88,6 +88,12 @@ body {
 	font-weight: bold;
 }
 
+.main .top-bar .logo {
+	height: 70px;
+	position: relative;
+	left: 400px;
+}
+
 .featured-movie {
 	position: relative;
 }
@@ -307,6 +313,7 @@ body {
 <body>
 	<div class="main" role="main">
 		<div class="top-bar">
+
 			<div class="profile-box"></div>
 			<ul class="top-menu">
 				<li><a href="#">Home</a></li>
@@ -321,7 +328,8 @@ body {
 						<option value="Chennai">Chennai</option>
 						<option value="Coimbatore">Coimbatore</option>
 						<option value="Trichy">Trichy</option>
-					</select>
+					</select> <img src="picture/logo7.png" alt="Logo" class="logo" />
+
 				</div>
 			</ul>
 		</div>
@@ -359,12 +367,11 @@ body {
 					</div>
 					<div class="list">
 						<ul>
-							<li th:each="movie : ${session.showList}"><img
+							<li th:each="movie : ${showList}"><img
 								th:src="'data:image/jpeg;base64,' + ${movie.imageUrl}"
-								alt="movie Image"> 
-								<a th:href="@{/seat}">
+								alt="movie Image"> <a th:href="@{/showTime(movieName=${movie.title})}">
 									<div class="title" th:text="${movie.title}">Movie Title</div>
-							    </a>
+							</a>
 
 								<div class="genre" th:text="${movie.genre}">Genre</div></li>
 						</ul>

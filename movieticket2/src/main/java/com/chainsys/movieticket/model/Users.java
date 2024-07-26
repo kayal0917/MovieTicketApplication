@@ -9,13 +9,6 @@ public class Users {
 	String email;
 	String password;
 	String location;
-
-	public String getUserName() {
-		return userName;
-	}
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
 	public String getLocation() {
 		return location;
 	}
