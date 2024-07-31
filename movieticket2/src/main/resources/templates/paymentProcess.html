@@ -1,326 +1,139 @@
-
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css" />
-    <link href="https://css.gg/paypal.css" rel="stylesheet" />
-  </head>
-  <style>
-* {
-    box-sizing: border-box;
-}
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Method</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
 body {
-    background-color: #28223F;
-    font-family: 'Roboto Condensed', sans-serif;
-    font-size: 62.5%;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
     display: flex;
-    align-items: center;
     justify-content: center;
-    flex-direction: column;
-    min-height: 100vh;
+    align-items: center;
+    height: 100vh;
     margin: 0;
 }
 
-.card-container {
-    background-color: #231E39;
-    border-radius: 5px;
-    box-shadow: 0px 10px 20px -10px rgba(0,0,0,0.75);
-    color: #B3B8CD;
-    padding-top: 30px;
-    width: 350px;
-    max-width: 100%;
-    text-align: center;
-}
-
-.top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.top-l {
-    display: flex;
-    align-items: center;
-}
-
-.top-l svg {
-    background-color: transparent;
-    color: #fff;
-    height: 1.6rem;
-    border: 1.5px solid #fff;
-    border-radius: 0.5rem;
-}
-
-.top-l h3 {
-    margin: 10px 0;
-    font-size: 1.3rem;
-    font-weight: 400;
-    color: #fff;
-    padding-left: 0.75rem;
-}
-
-.top-r {
-    display: flex;
-    align-items: center;
-}
-
-.top-r svg {
-    background-color: transparent;
-    color: #fff;
-    height: 1.6rem;
-    margin-right: 0.75rem;
-}
-
-.middle {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: -1rem;
-}
-
-.middle h3 {
-    margin: 10px 0;
-    font-size: 1.5rem;
-    color: #fff;
-}
-
-.extra-detail {
-    display: flex;
-    justify-content: center;
-}
-
-.detail {
-    padding-right: 2rem;
-    font-size: 0.8rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.detail p {
-    margin-bottom: 0;
-    font-size: 0.9rem;
-}
-
-.detail-price {
-    font-size: 0.8rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-.detail-price p {
-    margin-bottom: 0;
-    font-size: 0.9rem;
-}
-
-.border {
-    background-color: #535353;
-    border-radius: 0.4rem;
-    padding: 0.75rem;
-    width: 60%;
-    height: auto;
-    margin: 0 auto;
-    transform: translateY(-90%);
-}
-
-#dark {
-    z-index: 2;
-}
-
-.form-box {
-    background-color: #1F1A36;
-    padding: 15px;
-    margin-top: 5px;
-}
-
-.card-box {
+.payment-container {
     background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0px 10px 20px -10px rgba(0,0,0,0.75);
-    color: #B3B8CD;
-    padding-top: 20px;
-    width: 350px;
-    max-width: 100%;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+}
+
+h2 {
     text-align: center;
-    margin: 0 auto;
+    margin-bottom: 20px;
 }
 
-.main-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.payment-method {
+    margin-bottom: 20px;
 }
 
-.pay-method h3 {
-    color: #2D2747;
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-top: -0.5rem;
+.payment-method label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
-.pay-methods {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
+.card-details label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+.card-details input {
     width: 100%;
-    height: auto;
-    margin: 0 auto;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-#credit {
-    background-color: #2D2747;
-    color: #fff;
-    height: 2.2rem;
-    width: 2.1rem;
-    border: 1.2px solid #2D2747;
-    border-radius: 0.4rem; 
+.protection h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
-.pay-methods svg {
-    background-color: transparent;
-    color: #2D2747;
-    height: 2.2rem;
-    width: 2.2rem;
-    border: 1.2px solid #2D2747;
-    border-radius: 0.4rem; 
+.protection label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9em;
 }
 
-.name-area {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-left: 3.5rem;
+.total {
+    text-align: center;
+    margin-top: 20px;
 }
 
-.name-area h3 {
-    margin-bottom: -0.75rem;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1rem;
-    text-align: start;
-    color: #535353;
-    font-weight: 400;
+.total span {
+    color: #007bff;
+    font-weight: bold;
 }
 
-.name-area h3 > img {
-    margin-bottom: -0.3rem;
-    width: 1.3rem;
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
-.name-area h2 {
-    border: 1px solid #535353;
-    border-radius: 0.2rem;
-    padding: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1rem;
-    color: #535353;
-    font-weight: 600;
+button:hover {
+    background-color: #218838;
 }
+</style>
+<body>
+	<form th:action="@{/ticket}" method="post">
 
-.dates {
-    display: flex;
-    align-items: flex-start;
-}
+    <div class="payment-container">
+        <h2>Payment Method</h2>
+        <form>
+            <div class="payment-method">
+                <label>
+                    <input type="radio" name="payment" value="credit-card" checked>
+                    Credit Card
+                </label>
+                <div class="card-details">
+                    <label for="card-number">Card Number</label>
+                    <input type="text" id="card-number" name="card-number" placeholder="**** **** **** ****">
 
-.pay-btn {
-    background-color: #2D2747;
-    border-radius: 5px;
-    width: 79.5%;
-    height: auto;
-    padding: 0.4rem;
-    margin-bottom: 1rem;
-}
+                    <label for="exp-date">EXP DATE</label>
+                    <input type="text" id="exp-date" name="exp-date" placeholder="mm/yyyy">
 
-.pay-btn a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
-  
-  </style>
-  <body>
-    <div class="card-container">
-      
-
-      <div class="form-box">
-        <div class="card-box">
-          <div class="main-content">
-            <div class="pay-method"><h3>Payment Method</h3></div>
-            <div class="pay-methods">
-              <svg
-                id="credit"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                ></path>
-              </svg>
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M6.47005 3.54443H14.4701C16.1089 3.54443 17.4146 4.31866 18.0963 5.51496C19.3165 6.38743 19.9427 7.91487 19.6082 9.65332C19.0865 12.365 16.425 14.5633 13.6636 14.5633H11.6636L10.5301 20.4553H6.39824L6.62891 19.2563H3.44727L6.47005 3.54443ZM8.0922 5.50842H14.0922C15.7491 5.50842 16.8385 6.82737 16.5254 8.45439C16.2124 10.0814 14.6155 11.4004 12.9587 11.4004H8.95866L7.82511 17.2923H5.82511L8.0922 5.50842Z"
-                  fill="currentColor"
-                />
-              </svg>
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M6 12C6 15.3137 8.68629 18 12 18C14.6124 18 16.8349 16.3304 17.6586 14H12V10H21.8047V14H21.8C20.8734 18.5645 16.8379 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C15.445 2 18.4831 3.742 20.2815 6.39318L17.0039 8.68815C15.9296 7.06812 14.0895 6 12 6C8.68629 6 6 8.68629 6 12Z"
-                  fill="currentColor"
-                />
-              </svg>
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" name="cvv" placeholder="123">
+                </div>
             </div>
-          </div>
-          <div class="name-area">
-            <div class="name">
-              <h3>Name On Card</h3>
-              <h2>Ankit Pavar &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp&nbsp &nbsp&nbsp &nbsp</h2>
+            <div class="payment-method">
+                <label>
+                    <input type="radio" name="payment" value="paypal">
+                    PayPal
+                </label>
             </div>
-            <div class="card-num">
-              <h3>Card Number &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp&nbsp &nbsp &nbsp&nbsp &nbsp &nbsp<img src="https://img.icons8.com/ios/48/000000/visa.png"/></h3>
-              <h2>5252 &nbsp 6585 &nbsp 6585 &nbsp 6585 </h2>
+
+            <div class="protection">
+                <h3>Buyer Protection</h3>
+                <label>
+                    <input type="checkbox" checked>
+                    Full Refund if you don't receive your order
+                </label>
+                <label>
+                    <input type="checkbox" checked>
+                    Full or Partial Refund, if the product is not as described in details
+                </label>
             </div>
-            <div class="dates">
-              <div class="exp">
-                <h3>Expiry date</h3>
-                <h2>01/25 &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp </h2>
-              </div>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
-              <div class="cvv">
-                <h3>CVV</h3>
-                <h2>***</h2>
-              </div>
+
+            <div class="total">
+                <h3>All Total: <span>$27174.00</span></h3>
+                <button type="submit">Confirm & Pay</button>
             </div>
-            <div class="pay-btn">
-                <a href="#">Pay - $ 1,005</a> 
-            </div>
-          </div>
-          
-        </div>
-      </div>
+        </form>
     </div>
-
-    
-  </body>
+</body>
 </html>

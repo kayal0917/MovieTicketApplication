@@ -1,7 +1,5 @@
 package com.chainsys.movieticket.controller;
 
-import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,14 +12,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import com.chainsys.movieticket.dao.UserDAO;
 import com.chainsys.movieticket.model.Allocation;
-import com.chainsys.movieticket.model.Movie;
 import com.chainsys.movieticket.model.MovieDetails;
 import com.chainsys.movieticket.model.ShowTime;
 import com.chainsys.movieticket.model.Theater;
 import com.chainsys.movieticket.model.Users;
+import com.chainsys.movieticket.model.ticketBook;
 import com.chainsys.movieticket.validation.validation;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,7 +53,7 @@ public class MyController {
 	                                     .collect(Collectors.toList());
 		
 		model.addAttribute("showList",list);
-		return "home";
+		return "index";
 	}
 	@GetMapping("/showList")
 	public String showList() {
@@ -64,11 +61,25 @@ public class MyController {
 		return "showList";
 	}
 	@PostMapping("/ticket")
-	public String ticket() {
+	public String ticket(HttpSession session) {
+		Allocation allocation= (Allocation) session.getAttribute("allocation");
+		userDAO.insertBooking(allocation.getUserName(), allocation.getSeatCount(),allocation.getShowDate(),allocation.getTotalAmount());
+		String[] seat = allocation.getSeat().split(",");
+		for(int i=0;i<seat.length;i++) {
+			userDAO.seat(allocation.getUserName(),seat[i],allocation.getShowTime(),allocation.getTheaterId(),allocation.getBookingDate());
+		}
+				
+		
+
+
 		System.out.println("ticket Page");
 		return "ticket";
 	}
-	
+	@GetMapping("/index")
+	public String indexs() {
+		System.out.println("index Page");
+		return "index";
+	}
 	@RequestMapping("/signUp")
 	public String signUp(@RequestParam("userName") String userName, @RequestParam("email") String email,
 			@RequestParam("password") String password,@RequestParam("location") String location, Model model, HttpSession session) {
@@ -222,15 +233,12 @@ public class MyController {
 			}
 		}
 
-	@RequestMapping("/home")
-	public String home(Model model) {
-		System.out.println("home Page");
-		List<Movie> movie1 = userDAO.getAllMovie();
-		System.out.println(movie1.get(0).getTrailerUrl());
-		model.addAttribute("allmovies", movie1);
-		return "home";
-	}
-
+		/*
+		 * @RequestMapping("/home") public String home(Model model) {
+		 * System.out.println("home Page"); List<Movie> movie1 = userDAO.getAllMovie();
+		 * System.out.println(movie1.get(0).getTrailerUrl());
+		 * model.addAttribute("allmovies", movie1); return "home"; }
+		 */
 	@GetMapping("/theaterList")
 	public String getAllTheater(Model model) {
 		System.out.println("getting theater datas");
@@ -254,52 +262,42 @@ public class MyController {
 		return "theaterList";
 	}
 
-	@PostMapping("/movielist")
-	public String MovieList(@RequestParam("title") String title, @RequestParam("description") String description,
-			@RequestParam("releaseDate") String releaseDate, @RequestParam("duration") int duration,
-			@RequestParam("genre") String genre, @RequestParam("director") String director,
-			@RequestParam("cast") String cast, @RequestParam("language") String language,
-			@RequestParam("rating") double rating, @RequestParam("imageUrl") MultipartFile imageUrl,
-			@RequestParam("trailerUrl") String trailerUrl) throws IOException {
-		System.out.println(trailerUrl);
-		byte[] imageBytes=null;
-		if (!imageUrl.isEmpty()) {
-			try {
-                imageBytes = imageUrl.getBytes();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return "error";
-            }
-			Movie movie = new Movie();
-			movie.setTitle(title);
-			movie.setDescription(description);
-			movie.setReleaseDate(releaseDate);
-			movie.setDuration(duration);
-			movie.setGenre(genre);
-			movie.setDirector(director);
-			movie.setCast(cast);
-			movie.setLanguage(language);
-			movie.setRating(rating);
-			movie.setImageUrl(Base64.getEncoder().encodeToString(imageBytes));
-			System.out.println(imageBytes);
-			movie.setTrailerUrl(trailerUrl);
-			userDAO.insertMovie(movie);
-
-		} else {
-			return "home";
-		}
-
-		return "home";
-	}
-
-	@RequestMapping("/AllMovie")
-	public String AllMovie(Model model) {
-		List<Movie> movie1 = userDAO.getAllMovie();
-		System.out.println(movie1.get(0).getTrailerUrl());
-		model.addAttribute("allmovies", movie1);
-		return "/movielist";
-	}
-	
+	/*
+	 * @PostMapping("/movielist") public String MovieList(@RequestParam("title")
+	 * String title, @RequestParam("description") String description,
+	 * 
+	 * @RequestParam("releaseDate") String releaseDate, @RequestParam("duration")
+	 * int duration,
+	 * 
+	 * @RequestParam("genre") String genre, @RequestParam("director") String
+	 * director,
+	 * 
+	 * @RequestParam("cast") String cast, @RequestParam("language") String language,
+	 * 
+	 * @RequestParam("rating") double rating, @RequestParam("imageUrl")
+	 * MultipartFile imageUrl,
+	 * 
+	 * @RequestParam("trailerUrl") String trailerUrl) throws IOException {
+	 * System.out.println(trailerUrl); byte[] imageBytes=null; if
+	 * (!imageUrl.isEmpty()) { try { imageBytes = imageUrl.getBytes(); } catch
+	 * (IOException e) { e.printStackTrace(); return "error"; } Movie movie = new
+	 * Movie(); movie.setTitle(title); movie.setDescription(description);
+	 * movie.setReleaseDate(releaseDate); movie.setDuration(duration);
+	 * movie.setGenre(genre); movie.setDirector(director); movie.setCast(cast);
+	 * movie.setLanguage(language); movie.setRating(rating);
+	 * movie.setImageUrl(Base64.getEncoder().encodeToString(imageBytes));
+	 * System.out.println(imageBytes); movie.setTrailerUrl(trailerUrl);
+	 * userDAO.insertMovie(movie);
+	 * 
+	 * } else { return "home"; }
+	 * 
+	 * return "home"; }
+	 * 
+	 * @RequestMapping("/AllMovie") public String AllMovie(Model model) {
+	 * List<Movie> movie1 = userDAO.getAllMovie();
+	 * System.out.println(movie1.get(0).getTrailerUrl());
+	 * model.addAttribute("allmovies", movie1); return "/movielist"; }
+	 */
 
 	@GetMapping("/addShow")
 	public String addshow() {
@@ -361,6 +359,18 @@ public class MyController {
         model.addAttribute("showList", showList);
         return "showList";
     } 
+    @PostMapping("/processBooking")
+    public String processBooking(
+                                 @RequestParam("selectedSeats") String seats,
+                                 @RequestParam("selectedSeatsCount") int seatCount,HttpSession session) {
+    	
+    	Allocation allocation = (Allocation) session.getAttribute("allocation");
+    	allocation.setSeat(seats);
+    	allocation.setSeatCount(seatCount);
+    	allocation.setTotalAmount(seatCount*200);
+        return "payment";
+    }
+    
 //    @RequestMapping("/Search")
 //    public String propertySearch(Model model, @RequestParam("MovieName") String MovieName) {
 //        List<Movie> list = userDAO.Search(MovieName).stream()

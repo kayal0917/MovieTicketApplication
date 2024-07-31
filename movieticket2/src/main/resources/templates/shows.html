@@ -9,9 +9,13 @@
     </style>
     <script>
         function selectShowTime(element) {
-            // Get the showTime from the data attribute of the clicked element
+            // Get the showTime and showDate from the data attributes of the clicked element
             var showTime = element.getAttribute('data-showtime');
+            var showDate = element.getAttribute('data-showdate');
+            var theaterId = element.getAttribute('data-theaterId');
             document.getElementById('selectedShowTime').value = showTime;
+            document.getElementById('selectedShowDate').value = showDate;
+            document.getElementById('theaterId').value = theaterId;
             document.getElementById('showTimeForm').submit();
         }
     </script>
@@ -20,12 +24,16 @@
     <div class="container">
         <form id="showTimeForm" th:action="@{/seat}" method="get">
             <input type="hidden" id="selectedShowTime" name="selectedShowTime" />
+            <input type="hidden" id="selectedShowDate" name="selectedShowDate" />
+            <input type="hidden" id="theaterId" name="theaterId" />
             <div th:if="${session.showList}">
                 <div th:each="entry : ${session.showList}">
                     <h2 th:text="${entry.key}">Show</h2>
                     <ul>
                         <li th:each="movie : ${entry.value}" class="show-time"
                             th:data-showtime="${movie.showTime}"
+                            th:data-showdate="${movie.showDate}"
+                            th:data-theaterId="${movie.theaterId}"
                             th:onclick="selectShowTime(this)">
                             <span th:text="${movie.showTime}">Show Time</span>
                         </li>

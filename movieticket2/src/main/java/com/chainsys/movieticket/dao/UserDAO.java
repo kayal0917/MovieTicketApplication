@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
+
+import com.chainsys.movieticket.model.Allocation;
 import com.chainsys.movieticket.model.Movie;
 import com.chainsys.movieticket.model.MovieDetails;
 import com.chainsys.movieticket.model.ShowTime;
@@ -33,9 +35,10 @@ public interface UserDAO {
 	public Integer fetchMovieIdByTitle(String movieName);
 	public List<MovieDetails> getShowDetails(String location) ;
 	public List<MovieDetails> getShowDetails(String location,String movieName) ;
-	public void insertBooking(String userName, String seats, int seatCount, String bookingDate,
+	public void insertBooking(String userName, int seatCount, String bookingDate,
 			int totalAmount);
-	public void insertBooking(String userName, int seatCount, double totalAmount);
 
+	public List<Allocation> seatUser() ;
 
+	public void seat( String userName, String seats, String showtime, int theaterId, String showDate) ;
 }

@@ -2,7 +2,8 @@ package com.chainsys.movieticket.model;
 
 import java.util.Arrays;
 
-public class MovieDetails  {
+public class MovieDetails
+{
 	int showtimeId;
 	int movieId;
 	String title;

@@ -109,4 +109,13 @@ public class Allocation {
 	public void setLocation(String location) {
 		this.location = location;
 	}
+
+	@Override
+	public String toString() {
+		return "Allocation [bookingId=" + bookingId + ", userName=" + userName + ", SeatCount=" + SeatCount
+				+ ", bookingDate=" + bookingDate + ", totalAmount=" + totalAmount + ", seatId=" + seatId + ", seat="
+				+ seat + ", showTime=" + showTime + ", theaterId=" + theaterId + ", ShowDate=" + ShowDate
+				+ ", movieName=" + movieName + ", location=" + location + "]";
+	}
+	
 }

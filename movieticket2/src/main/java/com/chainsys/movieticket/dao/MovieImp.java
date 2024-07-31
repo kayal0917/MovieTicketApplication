@@ -2,16 +2,18 @@ package com.chainsys.movieticket.dao;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import com.chainsys.movieticket.mapper.MovieMapper;
+
+import com.chainsys.movieticket.mapper.SeatMapper;
+//import com.chainsys.movieticket.mapper.MovieMapper;
 import com.chainsys.movieticket.mapper.ShowDetailsMapper;
 import com.chainsys.movieticket.mapper.TheaterMapper;
 import com.chainsys.movieticket.mapper.UserMapper;
+import com.chainsys.movieticket.model.Allocation;
 import com.chainsys.movieticket.model.Movie;
 import com.chainsys.movieticket.model.MovieDetails;
 import com.chainsys.movieticket.model.ShowTime;
@@ -136,14 +138,15 @@ public class MovieImp implements UserDAO {
 
 	}
 
-	@Override
-	public void insertMovie(Movie movie) {
-		String insertmovie = "INSERT INTO movie_details (title, description, release_date, duration, genre, director, cast, language, rating, image_url, trailer_url) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-		Object[] params = { movie.getTitle(), movie.getDescription(), movie.getReleaseDate(), movie.getDuration(),
-				movie.getGenre(), movie.getDirector(), movie.getCast(), movie.getLanguage(), movie.getRating(),
-				movie.getImageUrl(), movie.getTrailerUrl() };
-		jdbcTemplate.update(insertmovie, params);
-	}
+	/*
+	 * @Override public void insertMovie(Movie movie) { String insertmovie =
+	 * "INSERT INTO movie_details (title, description, release_date, duration, genre, director, cast, language, rating, image_url, trailer_url) VALUES (?,?,?,?,?,?,?,?,?,?,?)"
+	 * ; Object[] params = { movie.getTitle(), movie.getDescription(),
+	 * movie.getReleaseDate(), movie.getDuration(), movie.getGenre(),
+	 * movie.getDirector(), movie.getCast(), movie.getLanguage(), movie.getRating(),
+	 * movie.getImageUrl(), movie.getTrailerUrl() };
+	 * jdbcTemplate.update(insertmovie, params); }
+	 */
 
 	public Integer findMovieIdByTitle(String title) {
 		String query = "SELECT movie_id FROM movie_details WHERE title = ?";
@@ -155,12 +158,12 @@ public class MovieImp implements UserDAO {
 		jdbcTemplate.update(insertShowtime, movieId, theaterId, Date.valueOf(showDate), Time.valueOf(showTime));
 	}
 
-	@Override
-	public List<Movie> getAllMovie() {
-		String select = "select title, description, release_date, duration, genre, director, cast, language, rating, image_url, trailer_url from movie_details where delete_user=0  ";
-		List<Movie> movieList = jdbcTemplate.query(select, new MovieMapper());
-		return movieList;
-	}
+//	@Override
+//	public List<Movie> getAllMovie() {
+//		String select = "select title, description, release_date, duration, genre, director, cast, language, rating, image_url, trailer_url from movie_details where delete_user=0  ";
+//		List<Movie> movieList = jdbcTemplate.query(select, new MovieMapper());
+//		return movieList;
+//	}
 //	@Override
 //	public List<Movie> getAllMovie(String location) {
 //		String select = "select title, description, release_date, duration, genre, director, cast, language, rating, image_url, trailer_url from movie_details where delete_user=0 ";
@@ -236,16 +239,43 @@ public class MovieImp implements UserDAO {
 	}
 
 	@Override
-	public void insertBooking(String userName, String seats, int seatCount, String bookingDate, int totalAmount) {
-		String sql = "INSERT INTO bookings (user_name, seats, seatcount, booking_date, total_amount) "
-				+ "VALUES (?, ?, ?, ?, ?)";
+	public void insertBooking(String userName,int seatCount, String bookingDate, int totalAmount) {
+	    String sql = "INSERT INTO bookings (user_name,seat_count, booking_date, total_amount) "
+	            + "VALUES (?, ?, ?, ?)";
 
-		jdbcTemplate.update(sql, userName, seats, seatCount, bookingDate, totalAmount);
-
+	    jdbcTemplate.update(sql, userName, seatCount, bookingDate, totalAmount);
 	}
-	public void insertBooking(String userName, int seatCount, double totalAmount) {
-        String sql = "INSERT INTO bookings (user_name, seat_count, total_amount) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, userName, seatCount, totalAmount);
-    }
+	@Override
+	public List<Allocation> seatUser() {
+	    String select = "SELECT  user_name, seats, showtime, theater_id, show_date FROM seats";
+	    List<Allocation> bookingList = jdbcTemplate.query(select, new SeatMapper());
+		return bookingList;
+	}
+
+	public void seat( String userName, String seats, String showtime, int theaterId, String showDate) {
+	    String sql = "INSERT INTO seats ( user_name, seats, showtime, theater_id, show_date) "
+	            + "VALUES ( ?, ?, ?, ?, ?)";
+
+	    jdbcTemplate.update(sql, userName, seats, showtime, theaterId, showDate);
+	}
+
+
+	/*
+	 * public void insertBooking(String userName, int seatCount, double totalAmount)
+	 * { String sql =
+	 * "INSERT INTO bookings (user_name, seat_count, total_amount) VALUES (?, ?, ?)"
+	 * ; jdbcTemplate.update(sql, userName, seatCount, totalAmount); }
+	 */
+	@Override
+	public List<Movie> getAllMovie() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void insertMovie(Movie movie) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 
 }
