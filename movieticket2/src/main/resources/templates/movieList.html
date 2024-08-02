@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Authorized Properties</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="icon" type="image/x-icon" th:href="@{/Assets/Nest Realty.jpg}">
+    <link rel="stylesheet" th:href="@{/lib/slick.grid.css}" type="text/css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background: linear-gradient(to right, #ffecd2, #fcb69f);
+            color: #444;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            background: -webkit-linear-gradient(#ee0979, #ff6a00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #searchInput {
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #myGrid {
+            width: 100%;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background: #fff;
+            padding: 20px;
+        }
+
+        .slick-header-column {
+            background: linear-gradient(to right, #ee0979, #ff6a00);
+            color: white;
+            font-weight: bold;
+        }
+
+        .slick-header-column .slick-column-name {
+            color: #fff;
+        }
+
+        .slick-row {
+            transition: background-color 0.3s ease;
+        }
+
+        .slick-row:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .slick-row:hover {
+            background-color: #ffecd2;
+        }
+
+        .slick-cell {
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .slick-header {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .view-btn {
+            background-color: #ee0979;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .view-btn:hover {
+            background-color: #ff6a00;
+        }
+
+        @media (max-width: 600px) {
+            #myGrid, .slick-header-column, .slick-row, .slick-cell {
+                display: block;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie List</h1>
+   <!--  <input placeholder="Search" type="text" id="searchInput" class="form-control mb-3"> -->
+    <div id="myGrid" style="height:500px;"></div>
+
+    <script th:src="@{/lib/jquery-1.7.min.js}"></script>
+    <script th:src="@{/lib/jquery-ui-1.8.16.custom.min.js}"></script>
+    <script th:src="@{/lib/jquery.event.drag-2.2.js}"></script>
+    <script th:src="@{/lib/slick.formatters.js}"></script>
+    <script th:src="@{/lib/slick.core.js}"></script>
+    <script th:src="@{/lib/slick.dataview.js}"></script>
+    <script th:src="@{/lib/slick.grid.js}"></script>
+            
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            var columns = [
+                { id: "title", name: "Title", field: "title", width: 100, sortable: true },
+                { id: "description", name: "Description", field: "description" },
+                { id: "releaseDate", name: "Release Date", field: "releaseDate" },
+                { id: "duration", name: "Duration", field: "duration" },
+                { id: "genre", name: "Genre", field: "genre" },
+                { id: "director", name: "Director", field: "director" },
+                { id: "cast", name: "Cast", field: "cast" },
+                { id: "language", name: "Language", field: "language" },
+                { id: "rating", name: "Rating", field: "rating" },
+                { id: "base64", name: "Image", field: "base64", width: 100, formatter: viewButtonFormatter }
+            ];
+
+            var options = {
+                enableCellNavigation: true,
+                enableColumnReorder: false,
+                forceFitColumns: true,
+                rowHeight: 45,
+                enableSorting: true
+            };
+
+            var data = /*[[${allmovies}]]*/ [];
+            
+            function viewButtonFormatter(row, cell, value, columnDef, dataContext) {
+                return `
+                    <form action="/view" method="post">
+                        <input type="hidden" name="title" value="${dataContext.title}">
+                        <button type="submit" class="view-btn" style="position: relative; left:20px; bottom:10px;">View</button>
+                    </form>`;
+            }
+    
+            var grid = new Slick.Grid("#myGrid", data, columns, options);
+
+            grid.onSort.subscribe(function (e, args) {
+                var field = args.sortCol.field;
+                data.sort(function (a, b) {
+                    var result = (a[field] > b[field]) ? 1 : ((a[field] < b[field]) ? -1 : 0);
+                    return args.sortAsc ? result : -result;
+                });
+                grid.invalidate();
+                grid.render();
+            });
+
+            $('#searchInput').on('input', function () {
+                var searchTerm = $(this).val().toLowerCase();
+                var filteredData = data.filter(function (item) {
+                    return Object.values(item).some(function (value) {
+                        return String(value).toLowerCase().includes(searchTerm);
+                    });
+                });
+                grid.setData(filteredData);
+                grid.invalidate();
+                grid.render();
+            });
+        });
+    </script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
